@@ -1,0 +1,19 @@
+{
+    "name": "Dean",
+    "quiz": [
+        {
+            "prompt": "Who is the first president of the United States?",
+            "answer": "George Washington",
+            "points": "1"
+        },
+        {
+            "prompt": "what is the capital of the United States?",
+            "answer": "New York",
+            "points": "5"
+        },{
+            "prompt": "what is 5+2",
+            "answer": "7",
+            "points": "5"
+        }
+    ]
+}
