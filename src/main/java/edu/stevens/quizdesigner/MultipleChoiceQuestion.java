@@ -1,30 +1,23 @@
-// package edu.stevens.quizdesigner;
+ package edu.stevens.quizdesigner;
 
-// import java.util.ArrayList;
+ public class MultipleChoiceQuestion extends Question {
+     private String[] choices;
+     private int answer;
 
-// public class MultipleChoiceQuestion extends Question {
-//     private ArrayList<String> choices;
-//     private int answer;
+     public MultipleChoiceQuestion(String prompt, double points, String answer, String[] choices) {
+         super(prompt, points, answer);
+         this.choices = choices;
+     }
 
-//     public MultipleChoiceQuestion(String prompt, double points, ArrayList<String> choices, int answer) {
-//         super(prompt, points);
-//         this.choices = choices;
-//         this.answer = answer;
-//     }
+     public String[] getChoices() {
+         return choices;
+     }
 
-//     public ArrayList<String> getChoices() {
-//         return choices;
-//     }
-
-//     public String getAnswer() {
-//         return choices.get(answer);
-//     }
-
-//     @Override
-//     public String toString() {
-//         return String.format(
-//             "Multiple Choice\nQuestion: %s\nPoints: %.1f\nChoices: %s\nAnswer: %s\n", 
-//             getPrompt(), getPoints(), getChoices(), getAnswer()
-//         );
-//     }
-// }
+     @Override
+     public String toString() {
+         return String.format(
+             "Multiple Choice%nQuestion: %s%nPoints: %.1f%nChoices: %s%nAnswer: %s%n",
+             prompt, points, answer, getChoices()
+         );
+     }
+ }

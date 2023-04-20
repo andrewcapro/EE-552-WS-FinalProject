@@ -64,9 +64,9 @@ public class Main {
         JSONArray quizArray = new JSONArray();
         for (Question question : quizQuestions) {
             JSONObject questionJSON = new JSONObject();
-            questionJSON.put("prompt", question.getPrompt());
-            questionJSON.put("answer", question.getAnswer());
-            questionJSON.put("points", question.getPoints());
+            questionJSON.put("prompt", question.prompt);
+            questionJSON.put("answer", question.answer);
+            questionJSON.put("points", question.points);
             
             if (question instanceof TrueFalseQuestion) {
                 questionJSON.put("type", "TF");
