@@ -12,20 +12,34 @@ import com.google.gson.GsonBuilder;
 public class AutoGrader {
     
     
-    public static void autograde(String quizSource, String quizAnswers) {
+    public static void autograde() {
         try{
-
+            File del = new File("autoResult/result.json");
+            if (del.delete()) { 
+                System.out.println("Deleted the file: " + del.getName());
+              } else {
+                System.out.println("Failed to delete the file.");
+            } 
+            String quizSource = "quizToBeGraded";
+            String quizAnswers = "quizAnswerkey";
             File folder = new File(quizSource);
             File[] listOfFiles = folder.listFiles();
+            File folder2 = new File(quizAnswers);
+            File[] listOfFiles2 = folder2.listFiles();
             AutogradeResult result = new AutogradeResult();
             ArrayList<Quiz> resultQuizs = new ArrayList<Quiz>();
 
             double maxScore = 0;
             double minScore = 0;
             double averageScore = 0;
-
-
-            result.name = "Quiz with answers from: " + quizAnswers;
+            String answerkey = "";
+            for (File file2 : listOfFiles2){
+                if (file2.isFile()){
+                    answerkey = file2.getName();
+                }
+            }
+            
+            result.name = "AutoGraded Quizzes with answers from: " + answerkey;
             for (File file : listOfFiles) {
                 if (file.isFile()) {
                     Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -34,7 +48,7 @@ public class AutoGrader {
                     ArrayList<Question> quiz = quizS.quiz;
 
 
-                    FileReader reader2 = new FileReader(quizAnswers);
+                    FileReader reader2 = new FileReader(quizAnswers + "/"+ answerkey);
                     Quiz quizA = gson.fromJson(reader2, Quiz.class);
                     ArrayList<Question> answers = quizA.quiz;
 
@@ -42,9 +56,12 @@ public class AutoGrader {
                     Double score = 0.0;
                     for(int i = 0; i < quiz.size(); i++){
                         if (quiz.get(i).prompt.equals(answers.get(i).prompt)){
-                            if (quiz.get(i).answer.equals(answers.get(i).answer)){
-                                score += answers.get(i).points;
+                            if (quiz.get(i).type.equals(answers.get(i).type)){
+                                if (quiz.get(i).answer.equals(answers.get(i).answer)){
+                                    score += answers.get(i).points;
+                                }
                             }
+                            
                             total += answers.get(i).points;
                         }
                     }
@@ -70,9 +87,9 @@ public class AutoGrader {
             result.minScore = Math.round(minScore*100)/100.0;
             result.quizs = resultQuizs;
 
-            System.out.println("Average Score: " + averageScore);
-            System.out.println("Max Score: " + maxScore);
-            System.out.println("Min Score: " + minScore);
+            System.out.println("Average Score: " +  result.avergageScore);
+            System.out.println("Max Score: " + result.maxScore);
+            System.out.println("Min Score: " + result.minScore);
             
 
             GsonBuilder build = new GsonBuilder();

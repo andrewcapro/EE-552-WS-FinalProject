@@ -2,7 +2,7 @@
 
  public class FillInTheBlankQuestion extends Question {
      public FillInTheBlankQuestion(String prompt, double points, String answer) {
-         super(prompt, points, answer);
+         super(prompt, points, answer, "FB");
      }
 
      @Override

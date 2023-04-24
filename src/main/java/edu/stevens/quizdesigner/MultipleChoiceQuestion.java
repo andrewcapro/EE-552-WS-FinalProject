@@ -5,7 +5,7 @@
      private int answer;
 
      public MultipleChoiceQuestion(String prompt, double points, String answer, String[] choices) {
-         super(prompt, points, answer);
+         super(prompt, points, answer, "MC");
          this.choices = choices;
      }
 
