@@ -4,8 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.Hashtable;
+
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -18,14 +17,17 @@ public class AutoGrader {
             if (del.delete()) { 
                 System.out.println("Deleted the file: " + del.getName());
               } else {
-                System.out.println("Failed to delete the file.");
+                System.out.println();
             } 
             String quizSource = "quizToBeGraded";
             String quizAnswers = "quizAnswerkey";
+
             File folder = new File(quizSource);
             File[] listOfFiles = folder.listFiles();
+
             File folder2 = new File(quizAnswers);
             File[] listOfFiles2 = folder2.listFiles();
+
             AutogradeResult result = new AutogradeResult();
             ArrayList<Quiz> resultQuizs = new ArrayList<Quiz>();
 
@@ -33,6 +35,8 @@ public class AutoGrader {
             double minScore = 0;
             double averageScore = 0;
             String answerkey = "";
+
+            //getting answerkey from quizAnswerkey folder
             for (File file2 : listOfFiles2){
                 if (file2.isFile()){
                     answerkey = file2.getName();
@@ -40,6 +44,8 @@ public class AutoGrader {
             }
             
             result.name = "AutoGraded Quizzes with answers from: " + answerkey;
+            
+            //Grading all files in quizToBeGraded folder
             for (File file : listOfFiles) {
                 if (file.isFile()) {
                     Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -54,6 +60,8 @@ public class AutoGrader {
 
                     int total= 0;
                     Double score = 0.0;
+
+                    //comparing answers for same question and grade the quiz
                     for(int i = 0; i < quiz.size(); i++){
                         if (quiz.get(i).prompt.equals(answers.get(i).prompt)){
                             if (quiz.get(i).type.equals(answers.get(i).type)){
@@ -90,8 +98,10 @@ public class AutoGrader {
             System.out.println("Average Score: " +  result.avergageScore);
             System.out.println("Max Score: " + result.maxScore);
             System.out.println("Min Score: " + result.minScore);
+           
             
 
+            //writing result file to autoResult
             GsonBuilder build = new GsonBuilder();
             Gson gson = build.create();
             File dir = new File("autoResult");
@@ -99,7 +109,7 @@ public class AutoGrader {
             FileWriter writer = new FileWriter(file);
             writer.write(gson.toJson(result));
             writer.close();
-
+            System.out.println("Results exported to Result.JSON in autoResult");
 
         }
         catch(Exception e){

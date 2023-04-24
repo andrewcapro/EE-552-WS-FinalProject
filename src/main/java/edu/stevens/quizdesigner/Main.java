@@ -7,7 +7,6 @@ import java.util.Scanner;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -16,9 +15,7 @@ public class Main {
         ArrayList<Question> quizQuestions = new ArrayList<>();
         System.out.println("Welcome to the Quiz Designer!");
         while (true){
-            //intro
-            
-
+            //intro selection
             System.out.println("1) Create a quiz");
             System.out.println("2) Edit a quiz");
             System.out.println("3) Take a quiz");
@@ -30,8 +27,9 @@ public class Main {
 
             String option = scanner.nextLine();
 
+            //option 1: creating a quiz and exporting to createdQuiz folder
             if (option.equals("1")){
-                System.out.println("You have selected to create a quiz");
+                System.out.println("\nYou have selected to create a quiz");
                 System.out.print("Enter quiz name: ");
                 String quizName = scanner.nextLine();
                 
@@ -135,8 +133,9 @@ public class Main {
                 System.out.println("You have selected to take a quiz");
                 break;
             }
+            //Option 4: autograding the quizzes in quizToBeGraded folder and exporting results in autoResults folder
             else if (option.equals("4")){
-                System.out.println("You have selected to autograde quizzes");
+                System.out.println("\nYou have selected to autograde quizzes");
                 System.out.println("Please put all quizzes to be graded in the quizToBeGraded folder");
                 System.out.println("Please put the answer key in the quizAnswerKey folder");
                 System.out.println("AnyFiles in autoResult will be deleted and replaced with new results");

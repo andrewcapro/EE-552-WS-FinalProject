@@ -1,7 +1,6 @@
 package edu.stevens.quizdesigner;
 
-import java.util.ArrayList;
-import java.util.Dictionary;
+import java.util.ArrayList;;
 
 public class AutogradeResult {
     public String name;
