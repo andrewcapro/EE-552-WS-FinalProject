@@ -1,0 +1,24 @@
+{
+  "name": "q1.json",
+  "quiz": [
+    {
+      "prompt": "Who is the first president of the United States?",
+      "points": 1.0,
+      "answer": "George W",
+      "type": "FB"
+    },
+    {
+      "prompt": "what is the capital of the United States?",
+      "points": 5.0,
+      "answer": "New York",
+      "type": "FB"
+    },
+    {
+      "prompt": "what is 5+2",
+      "points": 5.0,
+      "answer": "10",
+      "type": "FB"
+    }
+  ],
+  "score": 0.0
+}

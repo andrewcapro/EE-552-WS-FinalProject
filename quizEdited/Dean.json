@@ -1,0 +1,24 @@
+{
+  "name": "Dean.json",
+  "quiz": [
+    {
+      "prompt": "1+1",
+      "points": 5.0,
+      "answer": "2",
+      "type": "FB"
+    },
+    {
+      "prompt": "2+g",
+      "points": 3.0,
+      "answer": "idk",
+      "type": "MC"
+    },
+    {
+      "prompt": "5+5",
+      "points": 2.0,
+      "answer": "10",
+      "type": "FB"
+    }
+  ],
+  "score": 0.0
+}
