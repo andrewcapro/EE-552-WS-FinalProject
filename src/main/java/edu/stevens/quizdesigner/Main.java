@@ -311,30 +311,82 @@ public class Main {
                     } catch (IOException e) {
                         System.out.println("Failed to read quiz: " + e.getMessage());
                     }
-
-                
-
                 }
                 catch (Exception e){
                     System.out.println("\nNo quizzes to edit");
                     System.out.println("_______________________________________________________");
                     continue;
                 }
+            }
+            //option 3: taking a quiz
+            else if (option.equals("3")) {
+                System.out.println("\nYou have selected to take a quiz");
                 
-
-
-
-
-
-
-
-
-
+                File quizFolder = new File("quizToTake/");
+                File[] quizFiles = quizFolder.listFiles();
+                if (quizFiles == null || quizFiles.length == 0) {
+                    System.out.println("No quizzes found in the 'quizToTake' folder.");
+                    System.out.println("_______________________________________________________");
+                    return;
+                }
+                
+                // Prompt user to select a quiz
+                System.out.println("Select a quiz to take:");
+                for (int i = 0; i < quizFiles.length; i++) {
+                    System.out.println((i+1) + ". " + quizFiles[i].getName().replace(".json", ""));
+                }
+                int quizChoice = Integer.parseInt(scanner.nextLine()) - 1;
+                File quizFile = quizFiles[quizChoice];
+                
+                // Load quiz from JSON file
+                try {
+                    Scanner quizScanner = new Scanner(quizFile);
+                    String quizJSONString = quizScanner.useDelimiter("\\Z").next();
+                    quizScanner.close();
+                    JSONObject quizJSON = new JSONObject(quizJSONString);
+                    JSONArray quizArray = quizJSON.getJSONArray("quiz");
+                    
+                    // Display each question and prompt for answer
+                    for (int i = 0; i < quizArray.length(); i++) {
+                        JSONObject questionJSON = quizArray.getJSONObject(i);
+                        String prompt = questionJSON.getString("prompt");
+                        String type = questionJSON.getString("type");
+                        double points = questionJSON.getDouble("points");
+                        System.out.println("Question " + (i+1) + " (" + points + " points): " + prompt);
+                        
+                        if (type.equals("TF")) {
+                            System.out.print("Enter answer (true or false): ");
+                            String answer = scanner.nextLine();
+                            TrueFalseQuestion question = new TrueFalseQuestion(prompt, points, answer);
+                        } else if (type.equals("MC")) {
+                            JSONArray choicesArray = questionJSON.getJSONArray("choices");
+                            String[] choices = new String[choicesArray.length()];
+                            for (int j = 0; j < choicesArray.length(); j++) {
+                                choices[j] = choicesArray.getString(j);
+                            }
+                            System.out.println("Choose the correct answer:");
+                            for (int j = 0; j < choices.length; j++) {
+                                System.out.println((j+1) + ". " + choices[j]);
+                            }
+                            int choice = Integer.parseInt(scanner.nextLine()) - 1;
+                            MultipleChoiceQuestion question = new MultipleChoiceQuestion(prompt, points, choices[choice], choices);
+                        } else if (type.equals("FB")) {
+                            System.out.print("Enter answer: ");
+                            String answer = scanner.nextLine();
+                            FillInTheBlankQuestion question = new FillInTheBlankQuestion(prompt, points, answer);
+                        }
+                        
+                        System.out.println();
+                    }
+                    System.out.println("Quiz completed. Responses recorded.");
+                } 
+                catch (Exception e) {
+                    System.out.println("Quiz not found.");
+                    System.out.println("_______________________________________________________");
+                    continue;
+                }
             }
-            else if (option.equals("3")){
-                System.out.println("You have selected to take a quiz");
-                break;
-            }
+                
             //Option 4: autograding the quizzes in quizToBeGraded folder and exporting results in autoResults folder
             else if (option.equals("4")){
                 System.out.println("\nYou have selected to autograde quizzes");
