@@ -12,12 +12,6 @@
       "points": 3.0,
       "answer": "idk",
       "type": "MC"
-    },
-    {
-      "prompt": "5+5",
-      "points": 2.0,
-      "answer": "10",
-      "type": "FB"
     }
   ],
   "score": 0.0

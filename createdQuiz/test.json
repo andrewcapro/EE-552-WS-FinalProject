@@ -1,0 +1,29 @@
+{
+  "quiz": [
+    {
+      "answer": "true",
+      "type": "TF",
+      "prompt": "is this a test",
+      "points": 1
+    },
+    {
+      "answer": "yes",
+      "type": "FB",
+      "prompt": "is this also a test",
+      "points": 3
+    },
+    {
+      "answer": "absolutely",
+      "type": "MC",
+      "choices": [
+        "absolutely",
+        "maybe",
+        "no",
+        "definitely not"
+      ],
+      "prompt": "is this last one a test",
+      "points": 2
+    }
+  ],
+  "name": "test"
+}

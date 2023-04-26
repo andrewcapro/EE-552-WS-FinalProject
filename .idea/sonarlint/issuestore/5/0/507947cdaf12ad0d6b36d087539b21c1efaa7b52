@@ -1,0 +1,17 @@
+
+{
+java:S1319
+"eThe type of "quizs" should be an interface such as "List" rather than the implementation "ArrayList".(èƒ¨À
+f
+java:S1104"PMake name a static final constant or non-public and provide accessors if needed.( şÍ¾
+u
+java:S1104"XMake averageScore a static final constant or non-public and provide accessors if needed.(ºÓôÄ8êË©úû0
+j
+java:S1104"TMake maxScore a static final constant or non-public and provide accessors if needed.(æå¶Ê
+j
+java:S1104	"TMake minScore a static final constant or non-public and provide accessors if needed.(“ïŒ¤
+g
+java:S1104
+"QMake quizs a static final constant or non-public and provide accessors if needed.(èƒ¨À
+œ
+java:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(‡¯ùûÿÿÿÿ

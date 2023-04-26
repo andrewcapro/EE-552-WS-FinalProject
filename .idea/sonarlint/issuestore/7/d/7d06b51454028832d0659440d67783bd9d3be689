@@ -1,0 +1,14 @@
+
+†
+java:S1319"dThe type of "quiz" should be an interface such as "List" rather than the implementation "ArrayList".(¸š‡¿şÿÿÿÿ8Ó‚úû0
+m
+java:S1104"PMake name a static final constant or non-public and provide accessors if needed.( şÍ¾8Ó‚úû0
+r
+java:S1104"PMake quiz a static final constant or non-public and provide accessors if needed.(¸š‡¿şÿÿÿÿ8ŸÓ‚úû0
+s
+java:S1104"QMake score a static final constant or non-public and provide accessors if needed.(áÑíşÿÿÿÿ8ŸÓ‚úû0
+5
+java:S1700"Rename field "quiz"(¸š‡¿şÿÿÿÿ8 Ó‚úû0
+
+java:S1186
+"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(¥‚Óı8§Ó‚úû0

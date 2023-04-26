@@ -1,0 +1,41 @@
+
+
+java:S1192î"\Define a constant instead of duplicating this literal "Enter new question prompt: " 3 times.(óóÊùÿÿÿÿ8ª¹ƒúû0
+h
+java:S1192p"FDefine a constant instead of duplicating this literal ".json" 3 times.(ı©´Ûûÿÿÿÿ8«¹ƒúû0
+—
+java:S1192ë"tDefine a constant instead of duplicating this literal "Would you like to change the question prompt? (Y/N)" 3 times.(ìÖ²Úùÿÿÿÿ8«¹ƒúû0
+š
+java:S1192w"xDefine a constant instead of duplicating this literal "_______________________________________________________" 9 times.(èöâ‡ıÿÿÿÿ8¬¹ƒúû0
+‰
+java:S1192?"gDefine a constant instead of duplicating this literal "Enter comma-separated answer choices: " 3 times.(±»Õüÿÿÿÿ8¬¹ƒúû0
+z	java:S1356"YReduce the total number of break and continue statements in this loop to use at most one.(˜ïˆÿÿÿÿÿ8®¹ƒúû0
+{	java:S135°"YReduce the total number of break and continue statements in this loop to use at most one.(˜ïˆÿÿÿÿÿ8¯¹ƒúû0
+{	java:S135¢"YReduce the total number of break and continue statements in this loop to use at most one.(˜ïˆÿÿÿÿÿ8¯¹ƒúû0
+z	java:S135"YReduce the total number of break and continue statements in this loop to use at most one.(˜ïˆÿÿÿÿÿ8¯¹ƒúû0
+X
+java:S1141’"5Extract this nested try block into a separate method.(¡»¢üùÿÿÿÿ8±¹ƒúû0
+X
+java:S1141¥"5Extract this nested try block into a separate method.(¡»¢üùÿÿÿÿ8±¹ƒúû0
+p
+java:S3776"SRefactor this method to reduce its Cognitive Complexity from 196 to the 15 allowed.(Çµí‘8àÀƒúû0
+e
+java:S1854"BRemove this useless assignment to local variable "quizQuestions2".(”Çíşÿÿÿÿ8†Áƒúû0
+Z
+java:S1854ä"<Remove this useless assignment to local variable "question".(¹¿º8‹Áƒúû0
+Z
+java:S1854ğ"<Remove this useless assignment to local variable "question".(œª®8Áƒúû0
+_
+java:S1854ô"<Remove this useless assignment to local variable "question".(á¤•Ïùÿÿÿÿ8Áƒúû0
+9
+java:S3626º"Remove this redundant jump.(ÉŠ©ƒ8Áƒúû0
+9
+java:S3626ı"Remove this redundant jump.(ÉŠ©ƒ8Áƒúû0
+ˆ
+java:S6201]"fReplace this instanceof check and cast with 'instanceof MultipleChoiceQuestion multiplechoicequestion'(€…«ìûÿÿÿÿ8­Âƒúû0
+K
+java:S1481ä"-Remove this unused "question" local variable.(¹¿º8ÂÃƒúû0
+K
+java:S1481ğ"-Remove this unused "question" local variable.(œª®8ÌÃƒúû0
+P
+java:S1481ô"-Remove this unused "question" local variable.(á¤•Ïùÿÿÿÿ8ÏÃƒúû0

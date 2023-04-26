@@ -1,8 +1,6 @@
  package edu.stevens.quizdesigner;
 
  public class TrueFalseQuestion extends Question {
-     private boolean answer;
-
      public TrueFalseQuestion(String prompt, double points, String answer ) {
          super(prompt, points, answer,  "TF");
      }
