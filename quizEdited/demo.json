@@ -1,0 +1,36 @@
+{
+  "name": "demo.json",
+  "quiz": [
+    {
+      "prompt": "1+6",
+      "points": 5.0,
+      "answer": "7",
+      "type": "FB"
+    },
+    {
+      "prompt": "3+5",
+      "points": 1.0,
+      "answer": "8",
+      "type": "MC"
+    },
+    {
+      "prompt": "is 1+1\u003d 2",
+      "points": 3.0,
+      "answer": "true",
+      "type": "TF"
+    },
+    {
+      "choices": [
+        "7",
+        " 3",
+        " 6",
+        " 10"
+      ],
+      "prompt": "1+ 2",
+      "points": 10.0,
+      "answer": "10",
+      "type": "MC"
+    }
+  ],
+  "score": 0.0
+}
