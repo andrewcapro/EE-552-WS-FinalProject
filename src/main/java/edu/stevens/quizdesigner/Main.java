@@ -31,7 +31,7 @@ public class Main {
 
             String option = scanner.nextLine();
 
-            //Option 1: Creating a quiz and exporting it to the createdQuiz folder
+            //Option 1: Creating a quiz and exporting it to the quizzes folder
             if (option.equals("1")) {
                 System.out.println("\nYou have selected to create a quiz");
                 System.out.print("Enter quiz name: ");
@@ -109,26 +109,26 @@ public class Main {
 
                 // Export quiz to JSON file
                 try {
-                    FileWriter fileWriter = new FileWriter("createdQuiz/" + quizName + ".json");
+                    FileWriter fileWriter = new FileWriter("quizzes/" + quizName + ".json");
                     fileWriter.write(quizJSON.toString());
                     fileWriter.close();
-                    System.out.println("Quiz exported successfully to createdQuiz/" + quizName + ".json");
+                    System.out.println("Quiz exported successfully to quizzes/" + quizName + ".json");
                 } catch (IOException e) {
                     System.out.println("Failed to export quiz: " + e.getMessage());
                 }
                 System.out.println("_______________________________________________________");
             } else if (option.equals("2")) {
                 System.out.println("\nYou have selected to edit a quiz");
-                System.out.println("Please make sure the quiz you want to edit is in the quizToEdit folder");
+                System.out.println("Please make sure the quiz you want to edit is in the quizzes folder");
                 System.out.println("Please press ENTER to continue");
                 scanner.nextLine();
                 System.out.println("_______________________________________________________");
 
 
                 try {
-                    File file = new File("quizToEdit");
+                    File file = new File("quizzes");
                     File[] files = file.listFiles();
-                    System.out.println("Files in quizToEdit folder:");
+                    System.out.println("Files in quizzes folder:");
                     for (int i = 0; i < files.length; i++) {
                         System.out.println((i + 1) + ") " + files[i].getName());
                     }
@@ -144,7 +144,7 @@ public class Main {
                     // Read quiz from JSON file
                     Gson gson = new GsonBuilder().setPrettyPrinting().create();
                     try {
-                        FileReader fileReader = new FileReader("quizToEdit/" + quizName);
+                        FileReader fileReader = new FileReader("quizzes/" + quizName+ ".json");
                         Quiz quiz = gson.fromJson(fileReader, Quiz.class);
 
                         quizQuestions2 = quiz.quiz;
@@ -294,7 +294,9 @@ public class Main {
                             GsonBuilder builder = new GsonBuilder();
                             builder.setPrettyPrinting();
                             Gson gson2 = builder.create();
-                            File path = new File("quizEdited/" + quizName);
+                            File path = new File("quizzes/" + quizName + ".json");
+                            path.delete();
+                        
                             FileWriter writer = new FileWriter(path);
                             writer.write(gson2.toJson(editedQuiz));
                             writer.close();
@@ -318,10 +320,10 @@ public class Main {
             else if (option.equals("3")) {
                 System.out.println("\nYou have selected to take a quiz");
 
-                File quizFolder = new File("quizToTake/");
+                File quizFolder = new File("quizzes/");
                 File[] quizFiles = quizFolder.listFiles();
                 if (quizFiles == null || quizFiles.length == 0) {
-                    System.out.println("No quizzes found in the 'quizToTake' folder.");
+                    System.out.println("No quizzes found in the 'quizzes' folder.");
                     System.out.println("_______________________________________________________");
                     return;
                 }
