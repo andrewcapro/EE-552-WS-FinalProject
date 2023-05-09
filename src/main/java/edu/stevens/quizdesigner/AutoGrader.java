@@ -21,7 +21,7 @@ public class AutoGrader {
                 System.out.println();
             }
             String quizSource = "quizToBeGraded";
-            String quizAnswers = "quizAnswerkey";
+            String quizAnswers = "quizzes";
 
             File folder = new File(quizSource);
             File[] listOfFiles = folder.listFiles();
@@ -37,7 +37,7 @@ public class AutoGrader {
             double averageScore = 0;
             String answerKey = "";
 
-            //Getting the answer key from the quizAnswerkey folder
+            //Getting the answer key from the quizzes folder
             for (File file2 : listOfFiles2) {
                 if (file2.isFile()) {
                     answerKey = file2.getName();
