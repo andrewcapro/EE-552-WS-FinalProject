@@ -1,29 +1,30 @@
 {
+  "name": "Test.json",
   "quiz": [
     {
+      "prompt": "Is this a test",
+      "points": 5.0,
       "answer": "true",
-      "type": "TF",
-      "prompt": "is this a test",
-      "points": 1
+      "type": "TF"
     },
     {
-      "answer": "yes",
-      "type": "FB",
-      "prompt": "is this also a test",
-      "points": 3
+      "prompt": "What is your opinion of me",
+      "points": 10.0,
+      "answer": "You are cool",
+      "type": "FB"
     },
     {
-      "answer": "absolutely",
-      "type": "MC",
       "choices": [
-        "absolutely",
-        "maybe",
-        "no",
-        "definitely not"
+        "100",
+        "200",
+        "300",
+        "400"
       ],
-      "prompt": "is this last one a test",
-      "points": 2
+      "prompt": "50*4",
+      "points": 100.0,
+      "answer": "200",
+      "type": "MC"
     }
   ],
-  "name": "test"
+  "score": 0.0
 }

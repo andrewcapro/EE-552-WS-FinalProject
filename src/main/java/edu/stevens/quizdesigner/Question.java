@@ -1,10 +1,10 @@
 package edu.stevens.quizdesigner;
 
 public class Question {
-    public String prompt;
-    public double points;
-    public String answer;
-    public String type;
+    private String prompt;
+    private double points;
+    private String answer;
+    private String type;
 
     public Question(String prompt, double points, String answer, String type) {
         this.prompt = prompt;
@@ -13,4 +13,37 @@ public class Question {
         this.type = type;
     }
 
+    // Getters
+    public String getPrompt() {
+        return prompt;
+    }
+
+    public double getPoints() {
+        return points;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    // Setters
+    public void setPrompt(String prompt) {
+        this.prompt = prompt;
+    }
+
+    public void setPoints(double points) {
+        this.points = points;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 }

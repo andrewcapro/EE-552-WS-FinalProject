@@ -3,23 +3,23 @@ package edu.stevens.quizdesigner;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-
+import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class AutoGrader {
-
+    private AutoGrader() {
+    }
 
     public static void autograde() {
         try {
-            File del = new File("autoResult/result.json");
-            if (del.delete()) {
-                System.out.println("Deleted the file: " + del.getName());
-            } else {
-                System.out.println();
-            }
+            Path del = Paths.get("autoResult/result.json");
+            Files.delete(del);
             String quizSource = "quizToBeGraded";
             String quizAnswers = "quizzes";
 
@@ -30,7 +30,7 @@ public class AutoGrader {
             File[] listOfFiles2 = folder2.listFiles();
 
             AutogradeResult result = new AutogradeResult();
-            ArrayList<Quiz> resultQuizzes = new ArrayList<Quiz>();
+            List<Quiz> resultQuizzes = new ArrayList<>();
 
             double maxScore = 0;
             double minScore = 0;
@@ -44,7 +44,7 @@ public class AutoGrader {
                 }
             }
 
-            result.name = "Autograded quizzes with answers from: " + answerKey;
+            result.setName("Autograded quizzes with answers from: " + answerKey);
 
             //Grading all files in the quizToBeGraded folder
             for (File file : listOfFiles) {
@@ -52,25 +52,22 @@ public class AutoGrader {
                     Gson gson = new GsonBuilder().setPrettyPrinting().create();
                     FileReader reader = new FileReader(quizSource + "/" + file.getName());
                     Quiz quizS = gson.fromJson(reader, Quiz.class);
-                    ArrayList<Question> quiz = quizS.quiz;
+                    List<Question> quiz = quizS.getQuiz();
 
                     FileReader reader2 = new FileReader(quizAnswers + "/" + answerKey);
                     Quiz quizA = gson.fromJson(reader2, Quiz.class);
-                    ArrayList<Question> answers = quizA.quiz;
+                    List<Question> answers = quizA.getQuiz();
 
                     int total = 0;
                     double score = 0.0;
 
                     // Comparing answers for same question and grade the quiz
                     for (int i = 0; i < quiz.size(); i++) {
-                        if (quiz.get(i).prompt.equals(answers.get(i).prompt)) {
-                            if (quiz.get(i).type.equals(answers.get(i).type)) {
-                                if (quiz.get(i).answer.equals(answers.get(i).answer)) {
-                                    score += answers.get(i).points;
-                                }
+                        if (quiz.get(i).getPrompt().equals(answers.get(i).getPrompt())) {
+                            if (quiz.get(i).getType().equals(answers.get(i).getType()) && (quiz.get(i).getAnswer().equals(answers.get(i).getAnswer()))) {
+                                    score += answers.get(i).getPoints();
                             }
-
-                            total += answers.get(i).points;
+                            total += answers.get(i).getPoints();
                         }
                     }
                     averageScore += score / total;
@@ -81,31 +78,33 @@ public class AutoGrader {
                     if (score / total < minScore) {
                         minScore = 100 * score / total;
                     }
-                    System.out.println(quizS.name + "'s Score: " + score + "/" + total);
-                    quizS.score = Math.round(10000 * score / total) / 100;
+                    System.out.println(quizS.getName() + "'s Score: " + score + "/" + total);
+                    quizS.setScore(Math.round(10000 * score / total) / 100);
                     resultQuizzes.add(quizS);
                 }
             }
 
             averageScore = Math.round(100 * averageScore / listOfFiles.length * 100) / 100.0;
-            result.averageScore = Math.round(averageScore * 100) / 100.0;
-            result.maxScore = Math.round(maxScore * 100) / 100.0;
-            result.minScore = Math.round(minScore * 100) / 100.0;
-            result.quizs = resultQuizzes;
+            result.setAverageScore(Math.round(averageScore * 100) / 100.0);
+            result.setMaxScore(Math.round(maxScore * 100) / 100.0);
+            result.setMinScore(Math.round(minScore * 100) / 100.0);
+            result.setQuizs(resultQuizzes);
 
-            System.out.println("Average Score: " + result.averageScore);
-            System.out.println("Max Score: " + result.maxScore);
-            System.out.println("Min Score: " + result.minScore);
+            System.out.println("Average Score: " + result.getAverageScore());
+            System.out.println("Max Score: " + result.getMaxScore());
+            System.out.println("Min Score: " + result.getMinScore());
 
             //writing result file to autoResult
             GsonBuilder build = new GsonBuilder();
             Gson gson = build.create();
             File dir = new File("autoResult");
             File file = new File(dir, "result.json");
-            FileWriter writer = new FileWriter(file);
-            writer.write(gson.toJson(result));
-            writer.close();
-            System.out.println("Results exported to result.json in the autoResult folder");
+            try (FileWriter writer = new FileWriter(file)) {
+                writer.write(gson.toJson(result));
+                System.out.println("Results exported to result.json in the autoResult folder");
+            } catch (Exception e) {
+                System.out.println(e);
+            }
         } catch (Exception e) {
             System.out.println(e);
         }

@@ -9,7 +9,7 @@ public class FillInTheBlankQuestion extends Question {
     public String toString() {
         return String.format(
                 "Fill in the Blank%nQuestion: %s%nPoints: %.1f%nAnswer: %s%n",
-                prompt, points, answer
+                getPrompt(), getPoints(), getAnswer()
         );
     }
 }

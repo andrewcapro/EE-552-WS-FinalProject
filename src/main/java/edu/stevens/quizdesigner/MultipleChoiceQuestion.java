@@ -16,7 +16,7 @@ public class MultipleChoiceQuestion extends Question {
     public String toString() {
         return String.format(
                 "Multiple Choice%nQuestion: %s%nPoints: %.1f%nChoices: %s%nAnswer: %s%n",
-                prompt, points, answer, getChoices()
+                getPrompt(), getPoints(), getAnswer(), getChoices()
         );
     }
 }
