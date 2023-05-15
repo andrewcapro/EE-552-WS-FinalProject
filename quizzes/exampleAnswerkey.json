@@ -11,7 +11,8 @@
             "answer": "Washington D.C.",
             "points": "5",
             "type": "FB"
-        },{
+        },
+        {
             "prompt": "what is 5+2",
             "answer": "7",
             "points": "5",

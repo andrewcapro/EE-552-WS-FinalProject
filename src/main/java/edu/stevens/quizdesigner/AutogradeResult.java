@@ -7,6 +7,6 @@ public record AutogradeResult(
         double averageScore,
         double maxScore,
         double minScore,
-        List<Quiz>quizzes
+        List<Quiz> quizzes
 ) {
 }

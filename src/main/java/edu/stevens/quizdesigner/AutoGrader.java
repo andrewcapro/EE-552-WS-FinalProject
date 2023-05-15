@@ -37,49 +37,57 @@ public class AutoGrader {
             double averageScore = 0;
 
             //Getting the answer key from the quizzes folder
-            for (File file : listOfAnswers) {
-                if (file.isFile()) {
-                    answerKeyStr = file.getName();
+            if (listOfAnswers != null) {
+                for (File file : listOfAnswers) {
+                    if (file.isFile()) answerKeyStr = file.getName();
                 }
+            } else {
+                System.out.println("No answer key found");
+                return;
             }
 
             //Grading all files in the quizToBeGraded folder
-            for (File file : listOfSources) {
-                if (file.isFile()) {
-                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                    FileReader sourceReader = new FileReader(quizSourceStr + "/" + file.getName());
-                    Quiz currentQuiz = gson.fromJson(sourceReader, Quiz.class);
-                    List<Question> questions = currentQuiz.getQuestions();
+            if (listOfSources != null) {
+                for (File file : listOfSources) {
+                    if (file.isFile()) {
+                        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                        FileReader sourceReader = new FileReader(quizSourceStr + "/" + file.getName());
+                        Quiz currentQuiz = gson.fromJson(sourceReader, Quiz.class);
+                        List<Question> questions = currentQuiz.getQuestions();
 
-                    FileReader answerReader = new FileReader(quizAnswersStr + "/" + answerKeyStr);
-                    Quiz answerKey = gson.fromJson(answerReader, Quiz.class);
-                    List<Question> answerList = answerKey.getQuestions();
+                        FileReader answerReader = new FileReader(quizAnswersStr + "/" + answerKeyStr);
+                        Quiz answerKey = gson.fromJson(answerReader, Quiz.class);
+                        List<Question> answerList = answerKey.getQuestions();
 
-                    double total = 0.0;
-                    double score = 0.0;
+                        double total = 0.0;
+                        double score = 0.0;
 
-                    // Comparing answers for same question and grade the quiz
-                    for (int i = 0; i < questions.size(); i++) {
-                        if (questions.get(i).getPrompt().equals(answerList.get(i).getPrompt())) {
-                            if (questions.get(i).getType().equals(answerList.get(i).getType())
-                                    && (questions.get(i).getAnswer().equals(answerList.get(i).getAnswer()))) {
-                                score += answerList.get(i).getPoints();
+                        // Comparing answers for same question and grade the quiz
+                        for (int i = 0; i < questions.size(); i++) {
+                            if (questions.get(i).getPrompt().equals(answerList.get(i).getPrompt())) {
+                                if (questions.get(i).getType().equals(answerList.get(i).getType())
+                                        && (questions.get(i).getAnswer().equals(answerList.get(i).getAnswer()))) {
+                                    score += answerList.get(i).getPoints();
+                                }
+                                total += answerList.get(i).getPoints();
                             }
-                            total += answerList.get(i).getPoints();
                         }
-                    }
-                    double finalScore = 0;
-                    if (total > 0) finalScore = score/total;
-                    averageScore += finalScore;
-                    finalScore *= 100;
-                    finalScore = Double.parseDouble(df.format(finalScore));
-                    if (finalScore > maxScore) maxScore = finalScore;
-                    if (finalScore < minScore) minScore = finalScore;
+                        double finalScore = 0;
+                        if (total > 0) finalScore = score / total;
+                        averageScore += finalScore;
+                        finalScore *= 100;
+                        finalScore = Double.parseDouble(df.format(finalScore));
+                        if (finalScore > maxScore) maxScore = finalScore;
+                        if (finalScore < minScore) minScore = finalScore;
 
-                    System.out.println(currentQuiz.getName() + "'s Score: " + score + "/" + total);
-                    currentQuiz.setScore(finalScore);
-                    resultQuizzes.add(currentQuiz);
+                        System.out.println(currentQuiz.getName() + "'s Score: " + score + "/" + total);
+                        currentQuiz.setScore(finalScore);
+                        resultQuizzes.add(currentQuiz);
+                    }
                 }
+            } else {
+                System.out.println("No quizzes to be graded found");
+                return;
             }
 
             averageScore /= listOfSources.length;
