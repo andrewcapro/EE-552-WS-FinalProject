@@ -17,7 +17,10 @@ public class AutoGrader {
     }
 
     public static void autograde() {
-        try {
+        File dir = new File("autoResult");
+        File resultFile = new File(dir, "result.json");
+
+        try (FileWriter writer = new FileWriter(resultFile)) {
             Path del = Paths.get("autoResult/result.json");
             Files.delete(del);
             String quizSource = "quizToBeGraded";
@@ -65,7 +68,7 @@ public class AutoGrader {
                     for (int i = 0; i < quiz.size(); i++) {
                         if (quiz.get(i).getPrompt().equals(answers.get(i).getPrompt())) {
                             if (quiz.get(i).getType().equals(answers.get(i).getType()) && (quiz.get(i).getAnswer().equals(answers.get(i).getAnswer()))) {
-                                    score += answers.get(i).getPoints();
+                                score += answers.get(i).getPoints();
                             }
                             total += answers.get(i).getPoints();
                         }
@@ -97,16 +100,10 @@ public class AutoGrader {
             //writing result file to autoResult
             GsonBuilder build = new GsonBuilder();
             Gson gson = build.create();
-            File dir = new File("autoResult");
-            File file = new File(dir, "result.json");
-            try (FileWriter writer = new FileWriter(file)) {
-                writer.write(gson.toJson(result));
-                System.out.println("Results exported to result.json in the autoResult folder");
-            } catch (Exception e) {
-                System.out.println(e);
-            }
+            writer.write(gson.toJson(result));
+            System.out.println("Results exported to result.json in the autoResult folder");
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 }
