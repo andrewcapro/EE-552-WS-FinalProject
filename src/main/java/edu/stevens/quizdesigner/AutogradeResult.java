@@ -7,7 +7,7 @@ public class AutogradeResult {
     private double averageScore;
     private double maxScore;
     private double minScore;
-    private List<Quiz> quizs;
+    private List<Quiz> quizzes;
 
     public AutogradeResult() {
         // Data container corresponds to JSON
@@ -30,8 +30,8 @@ public class AutogradeResult {
         return minScore;
     }
 
-    public List<Quiz> getQuizs() {
-        return quizs;
+    public List<Quiz> getQuizzes() {
+        return quizzes;
     }
 
     // Setters
@@ -51,7 +51,7 @@ public class AutogradeResult {
         this.minScore = minScore;
     }
 
-    public void setQuizs(List<Quiz> quizs) {
-        this.quizs = quizs;
+    public void setQuizzes(List<Quiz> quizzes) {
+        this.quizzes = quizzes;
     }
 }

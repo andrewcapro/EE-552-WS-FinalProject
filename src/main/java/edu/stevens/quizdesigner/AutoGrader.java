@@ -88,7 +88,7 @@ public class AutoGrader {
             result.setAverageScore(Math.round(averageScore * 100) / 100.0);
             result.setMaxScore(Math.round(maxScore * 100) / 100.0);
             result.setMinScore(Math.round(minScore * 100) / 100.0);
-            result.setQuizs(resultQuizzes);
+            result.setQuizzes(resultQuizzes);
 
             System.out.println("Average Score: " + result.getAverageScore());
             System.out.println("Max Score: " + result.getMaxScore());
