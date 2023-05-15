@@ -1,5 +1,7 @@
 package edu.stevens.quizdesigner;
 
+import java.util.Arrays;
+
 public class MultipleChoiceQuestion extends Question {
     private final String[] choices;
 
@@ -16,7 +18,7 @@ public class MultipleChoiceQuestion extends Question {
     public String toString() {
         return String.format(
                 "Multiple Choice%nQuestion: %s%nPoints: %.1f%nChoices: %s%nAnswer: %s%n",
-                getPrompt(), getPoints(), getAnswer(), getChoices()
+                getPrompt(), getPoints(), getAnswer(), Arrays.toString(getChoices())
         );
     }
 }

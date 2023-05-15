@@ -4,7 +4,7 @@ public class Question {
     private String prompt;
     private double points;
     private String answer;
-    private String type;
+    private final String type;
 
     public Question(String prompt, double points, String answer, String type) {
         this.prompt = prompt;
@@ -41,9 +41,5 @@ public class Question {
 
     public void setAnswer(String answer) {
         this.answer = answer;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 }

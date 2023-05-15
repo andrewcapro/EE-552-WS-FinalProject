@@ -1,6 +1,6 @@
 {
     "name": "joe",
-    "quiz": [
+    "questions": [
         {
             "prompt": "Who is the first president of the United States?",
             "answer": "George W",
