@@ -8,11 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 
 public class Main {
     private static final String QUIZ_FOLDER = "quizzes/";
@@ -74,41 +70,42 @@ public class Main {
         }
 
         // Create JSON object for quiz
-        JSONObject quizJSON = new JSONObject();
-        quizJSON.put("name", quizName);
+        Gson gson = new Gson();
+        JsonObject quizJSON = new JsonObject();
+        quizJSON.addProperty("name", quizName);
 
-        JSONArray quizArray = new JSONArray();
+        JsonArray quizArray = new JsonArray();
         for (Question question : quizQuestions) {
-            JSONObject questionJSON = new JSONObject();
-            questionJSON.put("prompt", question.getPrompt());
-            questionJSON.put("answer", question.getAnswer());
-            questionJSON.put("points", question.getPoints());
+            JsonObject questionJSON = new JsonObject();
+            questionJSON.addProperty("prompt", question.getPrompt());
+            questionJSON.addProperty("answer", question.getAnswer());
+            questionJSON.addProperty("points", question.getPoints());
 
             if (question instanceof TrueFalseQuestion) {
-                questionJSON.put("type", "TF");
+                questionJSON.addProperty("type", "TF");
             } else if (question instanceof MultipleChoiceQuestion mcq) {
-                questionJSON.put("type", "MC");
-                JSONArray choicesArray = new JSONArray();
+                questionJSON.addProperty("type", "MC");
+                JsonArray choicesArray = new JsonArray();
                 String[] choices = mcq.getChoices();
                 for (String choice : choices) {
-                    choicesArray.put(choice);
+                    choicesArray.add(choice);
                 }
-                questionJSON.put("choices", choicesArray);
+                questionJSON.add("choices", choicesArray);
             } else if (question instanceof FillInTheBlankQuestion) {
-                questionJSON.put("type", "FB");
+                questionJSON.addProperty("type", "FB");
             }
-            quizArray.put(questionJSON);
+            quizArray.add(questionJSON);
         }
-        quizJSON.put("quiz", quizArray);
+        quizJSON.add("quiz", quizArray);
 
         // Export quiz to JSON file
         try (FileWriter fileWriter = new FileWriter(QUIZ_FOLDER + quizName + FILE_EXTENSION)) {
-            fileWriter.write(quizJSON.toString());
+            gson.toJson(quizJSON, fileWriter);
             System.out.println("Quiz exported successfully to " + QUIZ_FOLDER + quizName + FILE_EXTENSION);
         } catch (IOException e) {
             System.out.println("Failed to export quiz: " + e.getMessage());
         }
-        System.out.println("_______________________________________________________");
+        System.out.println("-------------------------------------------------------");
     }
 
     public static void edit() {
@@ -137,17 +134,18 @@ public class Main {
                 scanner.nextLine();
                 System.out.println("option=" + option);
 
-                //Option 1: Creating a quiz and exporting it to the quizzes folder
                 switch (option) {
+                    //Option 1: Creating a quiz and exporting it to the quizzes folder
                     case 1:
                         create();
                         break;
+                    // Option 2: Taking a quiz in the quizToTake folder
                     case 2:
                         System.out.println("\nYou have selected to edit a quiz");
                         System.out.println("Please make sure the quiz you want to edit is in the quizzes folder");
                         System.out.println("Please press ENTER to continue");
                         scanner.nextLine();
-                        System.out.println("_______________________________________________________");
+                        System.out.println("-------------------------------------------------------");
 
                         try {
                             File file = new File(QUIZ_FOLDER);
@@ -161,7 +159,7 @@ public class Main {
                             int quizToEdit = Integer.parseInt(scanner.nextLine());
                             String quizName = files[quizToEdit - 1].getName();
                             System.out.println("You have selected to edit " + quizName);
-                            System.out.println("_______________________________________________________");
+                            System.out.println("-------------------------------------------------------");
                             System.out.println("Quiz Questions:");
                             List<Question> quizQuestions2;
 
@@ -228,7 +226,7 @@ public class Main {
                                             System.out.println();
                                     } else if (questionToEdit > 0 && questionToEdit <= quizQuestions2.size()) {
                                         Question question = quizQuestions2.get(questionToEdit - 1);
-                                        System.out.println("_____________________________________________________________________________________");
+                                        System.out.println("-------------------------------------------------------");
                                         System.out.println("You have selected to edit question " + questionToEdit + ": " + question.getPrompt());
 
                                         System.out.println("\nQuestion point value: " + question.getPoints());
@@ -262,11 +260,11 @@ public class Main {
                                                         if (changePrompt.equalsIgnoreCase("Y")) {
                                                             System.out.print("Enter new question prompt: ");
                                                             String newPrompt = scanner.nextLine();
-                                                            TrueFalseQuestion newQuestion = new TrueFalseQuestion(
+                                                            Question newQuestion = new TrueFalseQuestion(
                                                                     newPrompt, question.getPoints(), newAnswer);
                                                             quizQuestions2.set(questionToEdit - 1, newQuestion);
                                                         } else {
-                                                            TrueFalseQuestion newQuestion = new TrueFalseQuestion(
+                                                            Question newQuestion = new TrueFalseQuestion(
                                                                     question.getPrompt(), question.getPoints(), newAnswer);
                                                             quizQuestions2.set(questionToEdit - 1, newQuestion);
                                                         }
@@ -282,11 +280,11 @@ public class Main {
                                                     if (changePrompt.equalsIgnoreCase("Y")) {
                                                         System.out.print("Enter new question prompt: ");
                                                         String newPrompt = scanner.nextLine();
-                                                        MultipleChoiceQuestion newQuestion = new MultipleChoiceQuestion(
+                                                        Question newQuestion = new MultipleChoiceQuestion(
                                                                 newPrompt, question.getPoints(), question.getAnswer(), choices);
                                                         quizQuestions2.set(questionToEdit - 1, newQuestion);
                                                     } else {
-                                                        MultipleChoiceQuestion newQuestion = new MultipleChoiceQuestion(
+                                                        Question newQuestion = new MultipleChoiceQuestion(
                                                                 question.getPrompt(), question.getPoints(), question.getAnswer(), choices);
                                                         quizQuestions2.set(questionToEdit - 1, newQuestion);
                                                     }
@@ -296,11 +294,11 @@ public class Main {
                                                     if (changePrompt.equalsIgnoreCase("Y")) {
                                                         System.out.print("Enter new question prompt: ");
                                                         String newPrompt = scanner.nextLine();
-                                                        FillInTheBlankQuestion newQuestion = new FillInTheBlankQuestion(
+                                                        Question newQuestion = new FillInTheBlankQuestion(
                                                                 newPrompt, question.getPoints(), question.getAnswer());
                                                         quizQuestions2.set(questionToEdit - 1, newQuestion);
                                                     } else {
-                                                        FillInTheBlankQuestion newQuestion = new FillInTheBlankQuestion(
+                                                        Question newQuestion = new FillInTheBlankQuestion(
                                                                 question.getPrompt(), question.getPoints(), question.getAnswer());
                                                         quizQuestions2.set(questionToEdit - 1, newQuestion);
                                                     }
@@ -319,18 +317,16 @@ public class Main {
                                 editedQuiz.setName(quizName);
                                 editedQuiz.setScore(0);
 
-                                try {
+                                File path = new File(QUIZ_FOLDER + quizName);
+                                try (FileWriter writer = new FileWriter(path)) {
                                     GsonBuilder builder = new GsonBuilder();
                                     builder.setPrettyPrinting();
                                     Gson gson2 = builder.create();
-                                    File path = new File(QUIZ_FOLDER + quizName);
                                     path.delete();
 
-                                    FileWriter writer = new FileWriter(path);
                                     writer.write(gson2.toJson(editedQuiz));
-                                    writer.close();
                                     System.out.println("Quiz successfully edited\n");
-                                    System.out.println("_______________________________________________________");
+                                    System.out.println("-------------------------------------------------------");
                                 } catch (Exception e) {
                                     System.out.println("Failed to write quiz: " + e.getMessage());
                                 }
@@ -339,7 +335,7 @@ public class Main {
                             }
                         } catch (Exception e) {
                             System.out.println("\nNo quizzes to edit");
-                            System.out.println("_______________________________________________________");
+                            System.out.println("-------------------------------------------------------");
                         }
                         break;
                     // Option 3: Taking a quiz
@@ -350,7 +346,7 @@ public class Main {
                         File[] quizFiles = quizFolder.listFiles();
                         if (quizFiles == null || quizFiles.length == 0) {
                             System.out.println("No quizzes found in the 'quizzes' folder.");
-                            System.out.println("_______________________________________________________");
+                            System.out.println("-------------------------------------------------------");
                             return;
                         }
 
@@ -367,37 +363,37 @@ public class Main {
                             Scanner quizScanner = new Scanner(quizFile);
                             String quizJSONString = quizScanner.useDelimiter("\\Z").next();
                             quizScanner.close();
-                            JSONObject quizJSON = new JSONObject(quizJSONString);
-                            JSONArray quizArray = quizJSON.getJSONArray("quiz");
+                            JsonObject quizJSON = JsonParser.parseString(quizJSONString).getAsJsonObject();
+                            JsonArray quizArray = quizJSON.getAsJsonArray("quiz");
 
                             // Display each question and prompt for answer
-                            for (int i = 0; i < quizArray.length(); i++) {
-                                JSONObject questionJSON = quizArray.getJSONObject(i);
-                                String prompt = questionJSON.getString("prompt");
-                                String type = questionJSON.getString("type");
-                                double points = questionJSON.getDouble("points");
+                            for (int i = 0; i < quizArray.size(); i++) {
+                                JsonObject questionJSON = quizArray.get(i).getAsJsonObject();
+                                String prompt = questionJSON.get("prompt").getAsString();
+                                String type = questionJSON.get("type").getAsString();
+                                double points = questionJSON.get("points").getAsDouble();
                                 System.out.println("Question " + (i + 1) + " (" + points + " points): " + prompt);
 
                                 if (type.equals("TF")) {
                                     System.out.print("Enter answer (true or false): ");
                                     String answer = scanner.nextLine();
-                                    TrueFalseQuestion question = new TrueFalseQuestion(prompt, points, answer);
+                                    Question question = new TrueFalseQuestion(prompt, points, answer);
                                 } else if (type.equals("MC")) {
-                                    JSONArray choicesArray = questionJSON.getJSONArray("choices");
-                                    String[] choices = new String[choicesArray.length()];
-                                    for (int j = 0; j < choicesArray.length(); j++) {
-                                        choices[j] = choicesArray.getString(j);
+                                    JsonArray choicesArray = questionJSON.getAsJsonArray("choices");
+                                    String[] choices = new String[choicesArray.size()];
+                                    for (int j = 0; j < choicesArray.size(); j++) {
+                                        choices[j] = choicesArray.get(j).getAsString();
                                     }
                                     System.out.println("Choose the correct answer:");
                                     for (int j = 0; j < choices.length; j++) {
                                         System.out.println((j + 1) + ". " + choices[j]);
                                     }
                                     int choice = Integer.parseInt(scanner.nextLine()) - 1;
-                                    MultipleChoiceQuestion question = new MultipleChoiceQuestion(prompt, points, choices[choice], choices);
+                                    Question question = new MultipleChoiceQuestion(prompt, points, choices[choice], choices);
                                 } else if (type.equals("FB")) {
                                     System.out.print("Enter answer: ");
                                     String answer = scanner.nextLine();
-                                    FillInTheBlankQuestion question = new FillInTheBlankQuestion(prompt, points, answer);
+                                    Question question = new FillInTheBlankQuestion(prompt, points, answer);
                                 }
 
                                 System.out.println();
@@ -405,10 +401,9 @@ public class Main {
                             System.out.println("Quiz completed. Responses recorded.");
                         } catch (Exception e) {
                             System.out.println("Quiz not found.");
-                            System.out.println("_______________________________________________________");
+                            System.out.println("-------------------------------------------------------");
                         }
                         break;
-
                     //Option 4: Autograding the quizzes in quizToBeGraded folder and exporting results into autoResults folder
                     case 4:
                         System.out.println("\nYou have selected to autograde quizzes");
@@ -417,9 +412,9 @@ public class Main {
                         System.out.println("Any files in the autoResult folder will be deleted and replaced with new results");
                         System.out.println("Please press ENTER when the files are in the correct folders");
                         scanner.nextLine();
-                        System.out.println("_______________________________________________________");
+                        System.out.println("-------------------------------------------------------");
                         AutoGrader.autograde();
-                        System.out.println("_______________________________________________________");
+                        System.out.println("-------------------------------------------------------");
                         break;
                     case 5:
                         System.out.println("You have selected to exit");
@@ -429,7 +424,7 @@ public class Main {
                         break;
                 }
             } while (option != 5);
-        } catch (NumberFormatException | JSONException e) {
+        } catch (NumberFormatException e) {
             e.printStackTrace();
         }
     }
