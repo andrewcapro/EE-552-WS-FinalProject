@@ -1,20 +1,20 @@
 {
-    "name": "bob",
-    "quiz": [
+    "name": "joe",
+    "questions": [
         {
             "prompt": "Who is the first president of the United States?",
-            "answer": "George Washington",
+            "answer": "George W",
             "points": "1",
             "type": "FB"
         },
         {
             "prompt": "what is the capital of the United States?",
-            "answer": "Washington D.C.",
+            "answer": "New York",
             "points": "5",
             "type": "FB"
         },{
             "prompt": "what is 5+2",
-            "answer": "7",
+            "answer": "10",
             "points": "5",
             "type": "FB"
         }

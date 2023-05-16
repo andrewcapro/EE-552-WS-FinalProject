@@ -1,6 +1,6 @@
 {
-  "name": "Test.json",
-  "quiz": [
+  "name": "test",
+  "questions": [
     {
       "prompt": "Is this a test",
       "points": 5.0,

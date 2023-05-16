@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Quiz {
     private String name;
-    private List<Question> quiz;
+    private List<Question> questions;
     private double score;
 
     public Quiz() {
@@ -16,8 +16,8 @@ public class Quiz {
         return name;
     }
 
-    public List<Question> getQuiz() {
-        return quiz;
+    public List<Question> getQuestions() {
+        return questions;
     }
 
     public double getScore() {
@@ -29,8 +29,8 @@ public class Quiz {
         this.name = name;
     }
 
-    public void setQuiz(List<Question> quiz) {
-        this.quiz = quiz;
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
     }
 
     public void setScore(double score) {

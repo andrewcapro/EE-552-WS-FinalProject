@@ -1,14 +1,16 @@
 package edu.stevens.quizdesigner;
 
-public class MultipleChoiceQuestion extends Question {
-    private final String[] choices;
+import java.util.List;
 
-    public MultipleChoiceQuestion(String prompt, double points, String answer, String[] choices) {
+public class MultipleChoiceQuestion extends Question {
+    private final List<String> choices;
+
+    public MultipleChoiceQuestion(String prompt, double points, String answer, List<String> choices) {
         super(prompt, points, answer, "MC");
         this.choices = choices;
     }
 
-    public String[] getChoices() {
+    public List<String> getChoices() {
         return choices;
     }
 
