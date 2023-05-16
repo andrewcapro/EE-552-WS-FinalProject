@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 
 import com.google.gson.Gson;
@@ -11,6 +12,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     private static final String QUIZ_FOLDER = "quizzes/";
@@ -246,7 +251,6 @@ public class Main {
             FileReader fileReader = new FileReader(QUIZ_FOLDER + quizName + FILE_EXTENSION);
             Quiz quiz = gson.fromJson(fileReader, Quiz.class);
             quizQuestions = quiz.getQuestions();
-
             while (true) {
                 System.out.println("Quiz questions:");
                 for (int i = 0; i < quizQuestions.size(); i++) {
@@ -280,6 +284,31 @@ public class Main {
             }
         } catch (IOException e) {
             System.out.println("Failed to read quiz: " + e.getMessage());
+        }
+    }
+
+    private static void exportQuiz() {
+        System.out.println("You have selected to export a quiz to a text file");
+        File quizFolder = new File(QUIZ_FOLDER);
+        File[] quizFiles = quizFolder.listFiles();
+        if (quizFiles == null || quizFiles.length == 0) {
+            System.out.println("No quizzes found in the 'quizzes' folder.");
+            return;
+        }
+
+        // Prompt user to select a quiz
+        System.out.println("Select a quiz to export:");
+        for (int i = 0; i < quizFiles.length; i++) {
+            System.out.println((i + 1) + ". " + quizFiles[i].getName().replace(FILE_EXTENSION, ""));
+        }
+        int quizChoice = scanner.nextInt() - 1;
+        scanner.nextLine();
+        File textFile = new File("autoResult/" + quizFiles[quizChoice].getName() + ".txt");
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(textFile))) {
+            //
+        } catch (IOException e) {
+            System.out.println("Unable to export to text file");
         }
     }
 
@@ -344,24 +373,20 @@ public class Main {
                     case "MC" -> {
                         question = new Gson().fromJson(questionJSON, MultipleChoiceQuestion.class);
                         System.out.print(question);
-
-                        JsonArray choicesArray = questionJSON.getAsJsonArray("choices");
-                        List<String> choices = new ArrayList<>();
-                        for (int j = 0; j < choicesArray.size(); j++) {
-                            choices.add(choicesArray.get(j).getAsString());
-                        }
+                        List<String> choices = ((MultipleChoiceQuestion)question).getChoices();
 
                         int choice = -1;
                         do {
                             try {
-                                System.out.println("Enter answer (must be number corresponding to your answer choice):");
+                                System.out
+                                        .println("Enter answer (must be number corresponding to your answer choice):");
                                 choice = scanner.nextInt() - 1;
                             } catch (InputMismatchException | IndexOutOfBoundsException e) {
                                 System.out.println("Answer must be one of the corresponding numbers");
                             } finally {
                                 scanner.nextLine();
                             }
-                        } while (choice < 0 || choice >= choicesArray.size());
+                        } while (choice < 0 || choice >= choices.size());
 
                         response = new MultipleChoiceQuestion(
                                 question.getPrompt(), question.getPoints(), choices.get(choice), choices);
@@ -395,6 +420,121 @@ public class Main {
         }
     }
 
+    private static void autoGrade() {
+        System.out.println("You have selected to autograde quizzes");
+        System.out.println("Please put all quizzes to be graded in the quizToBeGraded folder");
+        System.out.println("Please put the answer key in the quizzes folder");
+        System.out.println("Please press ENTER when the files are in the correct folders");
+        scanner.nextLine();
+
+        File dir = new File("autoResult");
+        File resultFile = new File(dir, "result" + System.currentTimeMillis() + ".json");
+
+        try (FileWriter writer = new FileWriter(resultFile)) {
+            String quizSourceStr = "quizToBeGraded";
+            File sourceFolder = new File(quizSourceStr);
+            File[] listOfSources = sourceFolder.listFiles();
+
+            String quizAnswersStr = "quizzes";
+            File answerFolder = new File(quizAnswersStr);
+            File[] listOfAnswers = answerFolder.listFiles();
+            String answerKeyStr;
+
+            List<Quiz> resultQuizzes = new ArrayList<>();
+
+            DecimalFormat df = new DecimalFormat("#.##");
+            double maxScore = -Double.MAX_VALUE;
+            double minScore = Double.MAX_VALUE;
+            double averageScore = 0;
+
+            //Getting the answer key from the quizzes folder
+            if (listOfAnswers == null || listOfAnswers.length == 0) {
+                System.out.println("No answer keys found");
+                return;
+            }
+
+            System.out.println("Select an answer key:");
+            for (int i = 0; i < listOfAnswers.length; i++) {
+                System.out.println((i + 1) + ". " + listOfAnswers[i].getName().replace(".json", ""));
+            }
+            int quizChoice = Integer.parseInt(Main.scanner.nextLine()) - 1;
+            answerKeyStr = listOfAnswers[quizChoice].getName();
+
+            //Grading all files in the quizToBeGraded folder
+            if (listOfSources == null || listOfSources.length == 0) {
+                System.out.println("No quizzes to grade found");
+                return;
+            }
+
+            for (File file : listOfSources) {
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                FileReader sourceReader = new FileReader(quizSourceStr + "/" + file.getName());
+                Quiz currentQuiz = gson.fromJson(sourceReader, Quiz.class);
+                List<Question> questions = currentQuiz.getQuestions();
+
+                FileReader answerReader = new FileReader(quizAnswersStr + "/" + answerKeyStr);
+                Quiz answerKey = gson.fromJson(answerReader, Quiz.class);
+                List<Question> answerList = answerKey.getQuestions();
+
+                double total = 0.0;
+                double score = 0.0;
+
+                if (questions.size() != answerList.size()) {
+                    System.out.println("Mismatch between quizzes and answer key, stopping autograde");
+                    return;
+                }
+
+                // Comparing answers for same question and grade the quiz
+                for (int i = 0; i < questions.size(); i++) {
+                    if (questions.get(i).getPrompt().equals(answerList.get(i).getPrompt())) {
+                        if (questions.get(i).getType().equals(answerList.get(i).getType())
+                                && (questions.get(i).getAnswer().equals(answerList.get(i).getAnswer()))) {
+                            score += answerList.get(i).getPoints();
+                        }
+                        total += answerList.get(i).getPoints();
+                    } else {
+                        System.out.println("Mismatch between quizzes and answer key, stopping autograde");
+                        return;
+                    }
+                }
+                double finalScore = 0;
+                if (total > 0) finalScore = score / total;
+                averageScore += finalScore;
+                finalScore *= 100;
+                finalScore = Double.parseDouble(df.format(finalScore));
+                if (finalScore > maxScore) maxScore = finalScore;
+                if (finalScore < minScore) minScore = finalScore;
+
+                System.out.println(file.getName() + "'s Score: " + score + "/" + total);
+                currentQuiz.setScore(finalScore);
+                resultQuizzes.add(currentQuiz);
+            }
+
+            averageScore /= listOfSources.length;
+            averageScore *= 100;
+            averageScore = Double.parseDouble(df.format(averageScore));
+
+            AutogradeResult result = new AutogradeResult(
+                    "Autograded quizzes with answers from: " + answerKeyStr,
+                    averageScore,
+                    maxScore,
+                    minScore,
+                    resultQuizzes
+            );
+
+            System.out.println("Average Score: " + result.averageScore());
+            System.out.println("Max Score: " + result.maxScore());
+            System.out.println("Min Score: " + result.minScore());
+
+            //writing result file to autoResult
+            Gson gson = new GsonBuilder().create();
+            writer.write(gson.toJson(result));
+            System.out.println("Results exported to result.json in the autoResult folder");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         try (scanner) {
             System.out.println("----------- Welcome to the Quiz Designer! -----------");
@@ -403,7 +543,6 @@ public class Main {
             do {
                 //Intro selection
                 System.out.println("-----------------------------------------------------");
-
                 System.out.println("1) Create a quiz");
                 System.out.println("2) Edit a quiz");
                 System.out.println("3) Take a quiz");
@@ -417,25 +556,13 @@ public class Main {
                 switch (option) {
                     //Option 1: Creating a quiz and exporting it to the quizzes folder
                     case 1 -> createQuiz();
-
                     // Option 2: Editing a quiz in the quizzes folder
                     case 2 -> editQuiz();
-
                     // Option 3: Taking a quiz in the quizzes folder
                     case 3 -> takeQuiz();
-
                     //Option 4: Autograding the quizzes in quizToBeGraded folder and exporting results into autoResults folder
-                    case 4 -> {
-                        System.out.println("You have selected to autograde quizzes");
-                        System.out.println("Please put all quizzes to be graded in the quizToBeGraded folder");
-                        System.out.println("Please put the answer key in the quizzes folder");
-                        System.out.println("Please press ENTER when the files are in the correct folders");
-                        scanner.nextLine();
-                        AutoGrader.autograde();
-                    }
-
+                    case 4 -> autoGrade();
                     case 5 -> System.out.println("You have selected to exit");
-
                     default -> System.out.println("Invalid option. Please try again.");
                 }
             } while (option != 5);

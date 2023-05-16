@@ -1,10 +1,13 @@
 package edu.stevens.quizdesigner;
 
+import java.util.List;
+
 public class Question {
     private final String prompt;
     private double points;
     private String answer;
     private final String type;
+    protected List<String> choices;
 
     public Question(String prompt, double points, String answer, String type) {
         this.prompt = prompt;

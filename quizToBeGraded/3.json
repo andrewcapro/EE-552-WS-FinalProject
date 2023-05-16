@@ -1,0 +1,1 @@
+{"name":"3","questions":[{"prompt":"1+2","answer":"3","points":6.0,"type":"FB"},{"prompt":"9+3","answer":"3","points":1.0,"type":"FB"},{"prompt":"hello","answer":"false","points":1.0,"type":"TF"},{"prompt":"4+3","answer":"7","points":1.0,"type":"MC"},{"prompt":"f||f","answer":"false","points":2.0,"type":"TF"},{"prompt":"fdas","answer":"2","points":43.0,"type":"MC"}]}
