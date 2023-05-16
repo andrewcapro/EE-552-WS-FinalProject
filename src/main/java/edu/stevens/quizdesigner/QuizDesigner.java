@@ -134,8 +134,9 @@ public class QuizDesigner {
             System.out.println("1) Change prompt");
             System.out.println("2) Change points");
             System.out.println("3) Change question type and answer");
-            System.out.println("4) Exit");
-            System.out.print("Please select an option (1, 2, 3, or 4): ");
+            System.out.println("4) Delete question");
+            System.out.println("5) Exit");
+            System.out.print("Please select an option (1, 2, 3, 4, or 5): ");
             option = Main.scanner.nextInt();
             Main.scanner.nextLine();
 
@@ -206,10 +207,14 @@ public class QuizDesigner {
                         default -> System.out.println("Invalid type, question type and answer will not be edited");
                     }
                 }
-                case 4 -> System.out.println("You have selected to exit");
+                case 4 -> {
+                    quizQuestions.remove(questionToEdit - 1);
+                    System.out.println("Question successfully removed");
+                }
+                case 5 -> System.out.println("You have selected to exit");
                 default -> System.out.println("Invalid option. Please try again.");
             }
-        } while (option != 4);
+        } while (option != 4 && option != 5);
     }
 
     public static void editQuiz() {
