@@ -27,7 +27,7 @@ public class AutoGrader {
             String quizAnswersStr = "quizzes";
             File answerFolder = new File(quizAnswersStr);
             File[] listOfAnswers = answerFolder.listFiles();
-            String answerKeyStr = "";
+            String answerKeyStr;
 
             List<Quiz> resultQuizzes = new ArrayList<>();
 
@@ -37,57 +37,58 @@ public class AutoGrader {
             double averageScore = 0;
 
             //Getting the answer key from the quizzes folder
-            if (listOfAnswers != null) {
-                for (File file : listOfAnswers) {
-                    if (file.isFile()) answerKeyStr = file.getName();
-                }
-            } else {
-                System.out.println("No answer key found");
+            if (listOfAnswers == null || listOfAnswers.length == 0) {
+                System.out.println("No answer keys found");
                 return;
             }
 
+            System.out.println("Select an answer key:");
+            for (int i = 0; i < listOfAnswers.length; i++) {
+                System.out.println((i + 1) + ". " + listOfAnswers[i].getName().replace(".json", ""));
+            }
+            int quizChoice = Integer.parseInt(Main.scanner.nextLine()) - 1;
+            answerKeyStr = listOfAnswers[quizChoice].getName();
+
             //Grading all files in the quizToBeGraded folder
-            if (listOfSources != null) {
-                for (File file : listOfSources) {
-                    if (file.isFile()) {
-                        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                        FileReader sourceReader = new FileReader(quizSourceStr + "/" + file.getName());
-                        Quiz currentQuiz = gson.fromJson(sourceReader, Quiz.class);
-                        List<Question> questions = currentQuiz.getQuestions();
+            if (listOfSources == null || listOfSources.length == 0) {
+                System.out.println("No quizzes to grade found");
+                return;
+            }
 
-                        FileReader answerReader = new FileReader(quizAnswersStr + "/" + answerKeyStr);
-                        Quiz answerKey = gson.fromJson(answerReader, Quiz.class);
-                        List<Question> answerList = answerKey.getQuestions();
+            for (File file : listOfSources) {
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                FileReader sourceReader = new FileReader(quizSourceStr + "/" + file.getName());
+                Quiz currentQuiz = gson.fromJson(sourceReader, Quiz.class);
+                List<Question> questions = currentQuiz.getQuestions();
 
-                        double total = 0.0;
-                        double score = 0.0;
+                FileReader answerReader = new FileReader(quizAnswersStr + "/" + answerKeyStr);
+                Quiz answerKey = gson.fromJson(answerReader, Quiz.class);
+                List<Question> answerList = answerKey.getQuestions();
 
-                        // Comparing answers for same question and grade the quiz
-                        for (int i = 0; i < questions.size(); i++) {
-                            if (questions.get(i).getPrompt().equals(answerList.get(i).getPrompt())) {
-                                if (questions.get(i).getType().equals(answerList.get(i).getType())
-                                        && (questions.get(i).getAnswer().equals(answerList.get(i).getAnswer()))) {
-                                    score += answerList.get(i).getPoints();
-                                }
-                                total += answerList.get(i).getPoints();
-                            }
+                double total = 0.0;
+                double score = 0.0;
+
+                // Comparing answers for same question and grade the quiz
+                for (int i = 0; i < questions.size(); i++) {
+                    if (questions.get(i).getPrompt().equals(answerList.get(i).getPrompt())) {
+                        if (questions.get(i).getType().equals(answerList.get(i).getType())
+                                && (questions.get(i).getAnswer().equals(answerList.get(i).getAnswer()))) {
+                            score += answerList.get(i).getPoints();
                         }
-                        double finalScore = 0;
-                        if (total > 0) finalScore = score / total;
-                        averageScore += finalScore;
-                        finalScore *= 100;
-                        finalScore = Double.parseDouble(df.format(finalScore));
-                        if (finalScore > maxScore) maxScore = finalScore;
-                        if (finalScore < minScore) minScore = finalScore;
-
-                        System.out.println(currentQuiz.getName() + "'s Score: " + score + "/" + total);
-                        currentQuiz.setScore(finalScore);
-                        resultQuizzes.add(currentQuiz);
+                        total += answerList.get(i).getPoints();
                     }
                 }
-            } else {
-                System.out.println("No quizzes to be graded found");
-                return;
+                double finalScore = 0;
+                if (total > 0) finalScore = score / total;
+                averageScore += finalScore;
+                finalScore *= 100;
+                finalScore = Double.parseDouble(df.format(finalScore));
+                if (finalScore > maxScore) maxScore = finalScore;
+                if (finalScore < minScore) minScore = finalScore;
+
+                System.out.println(currentQuiz.getName() + "'s Score: " + score + "/" + total);
+                currentQuiz.setScore(finalScore);
+                resultQuizzes.add(currentQuiz);
             }
 
             averageScore /= listOfSources.length;
