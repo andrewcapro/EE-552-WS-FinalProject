@@ -8,7 +8,7 @@ public class FillInTheBlankQuestion extends Question {
     @Override
     public String toString() {
         return String.format(
-                "Fill in the Blank/Free Response (%.1f points)%n%s",
+                "Fill in the Blank/Short Response (%.1f points)%n%s%n",
                 getPoints(), getPrompt()
         );
     }

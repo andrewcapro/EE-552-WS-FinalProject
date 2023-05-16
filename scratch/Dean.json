@@ -1,9 +1,0 @@
-{
-  "name": "dean",
-  "questions": [
-    { "prompt": "1+2", "answer": " 2", "points": 6.0, "type": "MC" },
-    { "prompt": "9+3", "answer": "12", "points": 1.0, "type": "FB" },
-    { "prompt": "hello", "answer": "false", "points": 1.0, "type": "TF" },
-    { "prompt": "4+3", "answer": "7", "points": 1.0, "type": "MC" }
-  ]
-}

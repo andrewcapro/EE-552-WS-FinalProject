@@ -1,0 +1,1 @@
+{"name":"good student","questions":[{"prompt":"2 + 2","answer":"4","points":2.5,"type":"MC"},{"prompt":"5 * 5 = 25?","answer":"true","points":5.0,"type":"TF"},{"prompt":"5 - 5","answer":"0","points":7.5,"type":"MC"},{"prompt":"1 / 1","answer":"1","points":3.0,"type":"FB"}]}

@@ -3,7 +3,7 @@ package edu.stevens.quizdesigner;
 import java.util.List;
 
 public class Question {
-    private final String prompt;
+    private String prompt;
     private double points;
     private String answer;
     private final String type;
@@ -34,6 +34,10 @@ public class Question {
     }
 
     // Setters
+    public void setPrompt(String prompt) {
+        this.prompt = prompt;
+    }
+
     public void setPoints(double points) {
         this.points = points;
     }

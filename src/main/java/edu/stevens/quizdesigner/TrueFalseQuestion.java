@@ -8,7 +8,7 @@
      @Override
      public String toString() {
          return String.format(
-             "True/False (%.1f points)%n%s",
+             "True/False (%.1f points)%n%s%n",
              getPoints(), getPrompt()
          );
      }

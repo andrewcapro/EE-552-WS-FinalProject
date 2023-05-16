@@ -1,0 +1,31 @@
+Name: 
+Date: 
+
+Quiz: Math Quiz
+
+Question 1
+Multiple Choice (2.5 points)
+2 + 2
+1. 1
+2. 2
+3. 4
+4. I don't know
+
+Question 2
+True/False (5.0 points)
+5 * 5 = 25?
+_____
+
+Question 3
+Multiple Choice (7.5 points)
+5 - 5
+1. -1
+2. 0
+3. 1
+4. 5
+5. 10
+
+Question 4
+Fill in the Blank/Short Response (3.0 points)
+1 / 1
+______________________________
