@@ -16,9 +16,21 @@ public class MultipleChoiceQuestion extends Question {
 
     @Override
     public String toString() {
-        return String.format(
-                "Multiple Choice (%.1f points)%n%s",
+        String promptHalf = String.format(
+                "Multiple Choice (%.1f points)%n%s%n",
                 getPoints(), getPrompt()
         );
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(promptHalf);
+
+        for (int i = 0; i < choices.size(); i++) {
+            sb.append(i+1)
+                    .append(". ")
+                    .append(choices.get(i))
+                    .append("\n");
+        }
+
+        return sb.toString();
     }
 }

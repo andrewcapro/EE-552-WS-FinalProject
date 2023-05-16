@@ -58,7 +58,6 @@ public class Main {
                 case "FB" -> {
                     System.out.print("Enter question answer: ");
                     answer = scanner.nextLine();
-
                     return new FillInTheBlankQuestion(prompt, points, answer);
                 }
                 default -> System.out.println("Invalid question type. Please try again.");
@@ -286,7 +285,6 @@ public class Main {
 
     private static void takeQuiz() {
         System.out.println("You have selected to take a quiz");
-
         File quizFolder = new File(QUIZ_FOLDER);
         File[] quizFiles = quizFolder.listFiles();
         if (quizFiles == null || quizFiles.length == 0) {
@@ -334,26 +332,37 @@ public class Main {
                     case "TF" -> {
                         question = new Gson().fromJson(questionJSON, TrueFalseQuestion.class);
                         System.out.println(question);
-                        System.out.print("Enter answer (true or false): ");
-                        String answer = scanner.nextLine();
+                        String answer;
+
+                        do {
+                            System.out.print("Enter answer (must be true/false): ");
+                            answer = scanner.nextLine().toLowerCase();
+                        } while (!answer.equals("true") && !answer.equals("false"));
+
                         response = new TrueFalseQuestion(question.getPrompt(), question.getPoints(), answer);
                     }
                     case "MC" -> {
                         question = new Gson().fromJson(questionJSON, MultipleChoiceQuestion.class);
-                        System.out.println(question);
+                        System.out.print(question);
 
                         JsonArray choicesArray = questionJSON.getAsJsonArray("choices");
                         List<String> choices = new ArrayList<>();
                         for (int j = 0; j < choicesArray.size(); j++) {
                             choices.add(choicesArray.get(j).getAsString());
                         }
-                        System.out.println("Choose the correct answer:");
-                        for (int j = 0; j < choices.size(); j++) {
-                            System.out.println((j + 1) + ". " + choices.get(j));
-                        }
 
-                        int choice = scanner.nextInt() - 1;
-                        scanner.nextLine();
+                        int choice = -1;
+                        do {
+                            try {
+                                System.out.println("Enter answer (must be number corresponding to your answer choice):");
+                                choice = scanner.nextInt() - 1;
+                            } catch (InputMismatchException | IndexOutOfBoundsException e) {
+                                System.out.println("Answer must be one of the corresponding numbers");
+                            } finally {
+                                scanner.nextLine();
+                            }
+                        } while (choice < 0 || choice >= choicesArray.size());
+
                         response = new MultipleChoiceQuestion(
                                 question.getPrompt(), question.getPoints(), choices.get(choice), choices);
                     }
