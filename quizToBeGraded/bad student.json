@@ -1,1 +1,29 @@
-{"name":"bad student","questions":[{"prompt":"2 + 2","answer":"I don't know","points":2.5,"type":"MC"},{"prompt":"5 * 5 = 25?","answer":"false","points":5.0,"type":"TF"},{"prompt":"5 - 5","answer":"10","points":7.5,"type":"MC"},{"prompt":"1 / 1","answer":"0","points":3.0,"type":"FB"}]}
+{
+  "name": "bad student",
+  "questions": [
+    {
+      "prompt": "2 + 2",
+      "answer": "I don't know",
+      "points": 2.5,
+      "type": "MC"
+    },
+    {
+      "prompt": "5 * 5 = 25?",
+      "answer": "false",
+      "points": 5.0,
+      "type": "TF"
+    },
+    {
+      "prompt": "5 - 5",
+      "answer": "10",
+      "points": 7.5,
+      "type": "MC"
+    },
+    {
+      "prompt": "1 / 1",
+      "answer": "0",
+      "points": 3.0,
+      "type": "FB"
+    }
+  ]
+}
