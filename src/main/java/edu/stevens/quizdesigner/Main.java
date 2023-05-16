@@ -357,6 +357,16 @@ public class Main {
                         JSONObject quizJSON = new JSONObject(quizJSONString);
                         JSONArray quizArray = quizJSON.getJSONArray("quiz");
 
+                        // Prompt user for name
+                        System.out.print("Enter your name: ");
+                        String name = scanner.nextLine();
+
+                        // Create quiz response JSON object
+                        JSONObject quizResponse = new JSONObject();
+                        quizResponse.put("name", name);
+
+                        JSONArray responsesArray = new JSONArray();
+
                         // Display each question and prompt for answer
                         for (int i = 0; i < quizArray.length(); i++) {
                             JSONObject questionJSON = quizArray.getJSONObject(i);
@@ -369,6 +379,15 @@ public class Main {
                                 System.out.print("Enter answer (true or false): ");
                                 String answer = scanner.nextLine();
                                 TrueFalseQuestion question = new TrueFalseQuestion(prompt, points, answer);
+
+                                // Add question response to quiz response array
+                                JSONObject questionResponse = new JSONObject();
+                                questionResponse.put("prompt", prompt);
+                                questionResponse.put("answer", answer);
+                                questionResponse.put("points", String.valueOf(points));
+                                questionResponse.put("type", type);
+                                responsesArray.put(questionResponse);
+
                             } else if (type.equals("MC")) {
                                 JSONArray choicesArray = questionJSON.getJSONArray("choices");
                                 String[] choices = new String[choicesArray.length()];
@@ -381,20 +400,53 @@ public class Main {
                                 }
                                 int choice = Integer.parseInt(scanner.nextLine()) - 1;
                                 MultipleChoiceQuestion question = new MultipleChoiceQuestion(prompt, points, choices[choice], choices);
+
+                                // Add question response to quiz response array
+                                JSONObject questionResponse = new JSONObject();
+                                questionResponse.put("prompt", prompt);
+                                questionResponse.put("answer", choices[choice]);
+                                questionResponse.put("points", String.valueOf(points));
+                                questionResponse.put("type", type);
+                                responsesArray.put(questionResponse);
+
                             } else if (type.equals("FB")) {
                                 System.out.print("Enter answer: ");
                                 String answer = scanner.nextLine();
                                 FillInTheBlankQuestion question = new FillInTheBlankQuestion(prompt, points, answer);
+
+                                // Add question response to quiz response array
+                                JSONObject questionResponse = new JSONObject();
+                                questionResponse.put("prompt", prompt);
+                                questionResponse.put("answer", answer);
+                                questionResponse.put("points", String.valueOf(points));
+                                questionResponse.put("type", type);
+                                responsesArray.put(questionResponse);
                             }
 
                             System.out.println();
                         }
-                        System.out.println("Quiz completed. Responses recorded.");
-                    } catch (Exception e) {
-                        System.out.println("Quiz not found.");
-                        System.out.println("_______________________________________________________");
+
+                        // Add quiz response array to quiz response object
+                        quizResponse.put("quiz", responsesArray);
+
+                        // Write quiz response JSON object to file
+                        File resultsFile = new File("quizToBeGraded/" + name + ".json");
+                        try {
+                            FileWriter fileWriter = new FileWriter(resultsFile);
+                            fileWriter.write(quizResponse.toString());
+                            fileWriter.close();
+                            System.out.println("Quiz completed. Responses recorded.");
+                        } catch (IOException e) {
+                            System.out.println("Error writing quiz results to file.");
+                        }
+
+
+
+                        } catch (Exception e) {
+                            System.out.println("Quiz not found.");
+                            System.out.println("_______________________________________________________");
+                        }
                     }
-                }
 
                 //Option 4: Autograding the quizzes in quizToBeGraded folder and exporting results into autoResults folder
                 else if (option.equals("4")) {
