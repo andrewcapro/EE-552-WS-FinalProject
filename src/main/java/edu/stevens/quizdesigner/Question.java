@@ -1,7 +1,7 @@
 package edu.stevens.quizdesigner;
 
 public class Question {
-    private String prompt;
+    private final String prompt;
     private double points;
     private String answer;
     private final String type;
@@ -31,10 +31,6 @@ public class Question {
     }
 
     // Setters
-    public void setPrompt(String prompt) {
-        this.prompt = prompt;
-    }
-
     public void setPoints(double points) {
         this.points = points;
     }

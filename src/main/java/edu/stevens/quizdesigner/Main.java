@@ -4,10 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -21,18 +18,28 @@ public class Main {
     public static final Scanner scanner = new Scanner(System.in);
 
     private static Question createQuestion(String prompt) {
-        System.out.print("Enter question point value: ");
-        double points = scanner.nextDouble();
-        scanner.nextLine();
+        double points;
+        try {
+            System.out.print("Enter question point value: ");
+            points = scanner.nextDouble();
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid point value, stopping question creation");
+            return new Question("", 0, "", "");
+        } finally {
+            scanner.nextLine();
+        }
 
         while (true) {
             System.out.print("Enter question type (TF for true/false, MC for multiple choice, or FB for fill-in-the-blank): ");
             String type = scanner.nextLine().toUpperCase();
+            String answer;
 
             switch (type) {
                 case "TF" -> {
-                    System.out.print("Enter question answer (true/false): ");
-                    String answer = scanner.nextLine();
+                    do {
+                        System.out.print("Enter question answer (must be true/false): ");
+                        answer = scanner.nextLine().toLowerCase();
+                    } while (!answer.equals("true") && !answer.equals("false"));
 
                     return new TrueFalseQuestion(prompt, points, answer);
                 }
@@ -41,14 +48,16 @@ public class Main {
                     String choicesString = scanner.nextLine();
                     List<String> choices = Arrays.asList(choicesString.split(","));
 
-                    System.out.print("Enter question answer: ");
-                    String answer = scanner.nextLine();
+                    do {
+                        System.out.print("Enter question answer (must be one of the valid answer choices): ");
+                        answer = scanner.nextLine();
+                    } while (!choices.contains(answer));
 
                     return new MultipleChoiceQuestion(prompt, points, answer, choices);
                 }
                 case "FB" -> {
                     System.out.print("Enter question answer: ");
-                    String answer = scanner.nextLine();
+                    answer = scanner.nextLine();
 
                     return new FillInTheBlankQuestion(prompt, points, answer);
                 }
@@ -72,7 +81,8 @@ public class Main {
                 break;
             }
 
-            quizQuestions.add(createQuestion(prompt));
+            Question question = createQuestion(prompt);
+            if (!question.getType().equals("")) quizQuestions.add(question);
             System.out.println();
         }
 
@@ -314,19 +324,24 @@ public class Main {
             // Display each question and prompt for answer
             for (int i = 0; i < questionArray.size(); i++) {
                 JsonObject questionJSON = questionArray.get(i).getAsJsonObject();
-                String prompt = questionJSON.get("prompt").getAsString();
                 String type = questionJSON.get("type").getAsString();
-                double points = questionJSON.get("points").getAsDouble();
-                System.out.println("Question " + (i + 1) + " (" + points + " points): " + prompt);
+
+                System.out.println("Question " + (i + 1));
+                Question question;
                 Question response;
 
                 switch (type) {
                     case "TF" -> {
+                        question = new Gson().fromJson(questionJSON, TrueFalseQuestion.class);
+                        System.out.println(question);
                         System.out.print("Enter answer (true or false): ");
                         String answer = scanner.nextLine();
-                        response = new TrueFalseQuestion(prompt, points, answer);
+                        response = new TrueFalseQuestion(question.getPrompt(), question.getPoints(), answer);
                     }
                     case "MC" -> {
+                        question = new Gson().fromJson(questionJSON, MultipleChoiceQuestion.class);
+                        System.out.println(question);
+
                         JsonArray choicesArray = questionJSON.getAsJsonArray("choices");
                         List<String> choices = new ArrayList<>();
                         for (int j = 0; j < choicesArray.size(); j++) {
@@ -336,15 +351,21 @@ public class Main {
                         for (int j = 0; j < choices.size(); j++) {
                             System.out.println((j + 1) + ". " + choices.get(j));
                         }
+
                         int choice = scanner.nextInt() - 1;
-                        response = new MultipleChoiceQuestion(prompt, points, choices.get(choice), choices);
+                        scanner.nextLine();
+                        response = new MultipleChoiceQuestion(
+                                question.getPrompt(), question.getPoints(), choices.get(choice), choices);
                     }
                     default -> {
+                        question = new Gson().fromJson(questionJSON, FillInTheBlankQuestion.class);
+                        System.out.println(question);
                         System.out.print("Enter answer: ");
                         String answer = scanner.nextLine();
-                        response = new FillInTheBlankQuestion(prompt, points, answer);
+                        response = new FillInTheBlankQuestion(question.getPrompt(), question.getPoints(), answer);
                     }
                 }
+
                 // Add question response to quiz response array
                 JsonObject questionResponse = new JsonObject();
                 questionResponse.addProperty("prompt", response.getPrompt());

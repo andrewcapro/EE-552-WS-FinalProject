@@ -3,6 +3,8 @@ package edu.stevens.quizdesigner;
 import java.util.List;
 
 public class Quiz {
+    // Linter gives issues with name and score
+    // They are required to stay the way they are for proper autoResult json export
     private String name;
     private List<Question> questions;
     private double score;
@@ -12,10 +14,6 @@ public class Quiz {
     }
 
     // Getters
-    public String getName() {
-        return name;
-    }
-
     public List<Question> getQuestions() {
         return questions;
     }
@@ -25,10 +23,6 @@ public class Quiz {
     }
 
     // Setters
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public void setQuestions(List<Question> questions) {
         this.questions = questions;
     }

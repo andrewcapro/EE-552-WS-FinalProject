@@ -68,6 +68,11 @@ public class AutoGrader {
                 double total = 0.0;
                 double score = 0.0;
 
+                if (questions.size() != answerList.size()) {
+                    System.out.println("Mismatch between quizzes and answer key, stopping autograde");
+                    return;
+                }
+
                 // Comparing answers for same question and grade the quiz
                 for (int i = 0; i < questions.size(); i++) {
                     if (questions.get(i).getPrompt().equals(answerList.get(i).getPrompt())) {
@@ -76,6 +81,9 @@ public class AutoGrader {
                             score += answerList.get(i).getPoints();
                         }
                         total += answerList.get(i).getPoints();
+                    } else {
+                        System.out.println("Mismatch between quizzes and answer key, stopping autograde");
+                        return;
                     }
                 }
                 double finalScore = 0;
@@ -86,7 +94,7 @@ public class AutoGrader {
                 if (finalScore > maxScore) maxScore = finalScore;
                 if (finalScore < minScore) minScore = finalScore;
 
-                System.out.println(currentQuiz.getName() + "'s Score: " + score + "/" + total);
+                System.out.println(file.getName() + "'s Score: " + score + "/" + total);
                 currentQuiz.setScore(finalScore);
                 resultQuizzes.add(currentQuiz);
             }

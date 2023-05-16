@@ -17,8 +17,8 @@ public class MultipleChoiceQuestion extends Question {
     @Override
     public String toString() {
         return String.format(
-                "Multiple Choice%nQuestion: %s%nPoints: %.1f%nChoices: %s%nAnswer: %s%n",
-                getPrompt(), getPoints(), getAnswer(), getChoices()
+                "Multiple Choice (%.1f points)%n%s",
+                getPoints(), getPrompt()
         );
     }
 }

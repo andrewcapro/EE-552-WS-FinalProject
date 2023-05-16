@@ -8,8 +8,8 @@
      @Override
      public String toString() {
          return String.format(
-             "True/False%nQuestion: %s%nPoints: %.1f%nAnswer: %s%n",
-             getPrompt(), getPoints(), getAnswer()
+             "True/False (%.1f points)%n%s",
+             getPoints(), getPrompt()
          );
      }
  }
